@@ -131,7 +131,7 @@ const Workout: React.FC<{ workout: Workout }> = ({ workout }) => {
           </div>
         )}
 
-        {popupType === "tracked" && (
+        {isTracked && (
           <>
             <div className="bg-gray-back p-2 w-full">
               <div className="flex w-full justify-between items-center">

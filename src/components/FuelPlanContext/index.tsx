@@ -10,6 +10,8 @@ interface FuelPlanContextProps {
   setStartDate: React.Dispatch<React.SetStateAction<Date>>;
   endDate: Date;
   setEndDate: React.Dispatch<React.SetStateAction<Date>>;
+  hideMacros: boolean;
+  setHideMacros: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const FuelPlanContext = createContext<FuelPlanContextProps | undefined>(
@@ -21,6 +23,8 @@ export const FuelPlanProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const [startDate, setStartDate] = useState(getStartOfWeek(new Date()));
   const [endDate, setEndDate] = useState(getEndOfWeek(new Date()));
+  const [hideMacros, setHideMacros] = useState(false);
+
   return (
     <FuelPlanContext.Provider
       value={{
@@ -28,6 +32,8 @@ export const FuelPlanProvider: React.FC<{ children: React.ReactNode }> = ({
         setStartDate,
         endDate,
         setEndDate,
+        hideMacros,
+        setHideMacros,
       }}
     >
       {children}

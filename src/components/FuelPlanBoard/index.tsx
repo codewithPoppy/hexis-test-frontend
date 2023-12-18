@@ -4,7 +4,6 @@ import { useFuelPlan } from "../FuelPlanContext";
 import BoardHeader from "./BoardHeader";
 import BoardContent from "./BoardContent";
 import "./index.css";
-import Loader from "./Loader";
 
 function FuelPlanboard() {
   const { startDate, endDate } = useFuelPlan();

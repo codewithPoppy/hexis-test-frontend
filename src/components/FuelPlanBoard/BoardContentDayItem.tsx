@@ -10,6 +10,7 @@ import { ADD_MACRO, DELETE_MACRO } from "@/queries/macros";
 import { ADD_CARBCODE, DELETE_CARBCODE } from "@/queries/carbcodes";
 import { ADD_WORKOUT, DELETE_WORKOUT } from "@/queries/workouts";
 import Loader from "./Loader";
+import { useFuelPlan } from "../FuelPlanContext";
 
 interface BoardContentDayItemProps {
   dayPlan: DayPlan;
@@ -24,6 +25,7 @@ const BoardContentDayItem: React.FC<BoardContentDayItemProps> = ({
   dayPlan,
   setData,
 }) => {
+  const { hideMacros } = useFuelPlan();
   const { macro, planItems } = dayPlan;
   const { setMacros, setCarbCodes, setWorkOuts } = setData;
 
@@ -120,6 +122,25 @@ const BoardContentDayItem: React.FC<BoardContentDayItemProps> = ({
     deleteWorkoutLoading,
   ]);
 
+  const trackedSum = {
+    calories: planItems
+      .filter((item) => item.isTracked)
+      .map((item) => item.trackedCalories)
+      .reduce((a, b) => a + b, 0),
+    carbs: planItems
+      .filter((item) => item.isTracked)
+      .map((item) => item.trackedCarbs)
+      .reduce((a, b) => a + b, 0),
+    protein: planItems
+      .filter((item) => item.isTracked)
+      .map((item) => item.trackedProtein)
+      .reduce((a, b) => a + b, 0),
+    fat: planItems
+      .filter((item) => item.isTracked)
+      .map((item) => item.trackedFat)
+      .reduce((a, b) => a + b, 0),
+  };
+
   return (
     <>
       <div
@@ -128,7 +149,15 @@ const BoardContentDayItem: React.FC<BoardContentDayItemProps> = ({
         onMouseLeave={() => setHover(false)}
       >
         <div className="board-item-content w-full pb-10">
-          {!!macro && <MacrosComponent macro={macro} />}
+          <div
+            className={`${
+              hideMacros ? "max-h-0" : "max-h-full"
+            } transition-all overflow-hidden duration-500`}
+          >
+            {!!macro && (
+              <MacrosComponent macro={macro} trackedData={trackedSum} />
+            )}
+          </div>
           {planItems.map((item, index) => (
             <React.Fragment key={index}>
               {isCarbCode(item) && (

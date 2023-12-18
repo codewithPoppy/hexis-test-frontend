@@ -1,18 +1,25 @@
+"use client";
 import React from "react";
 import { HideEnergyIcon, MoreInfoIcon } from "../Icons";
 
 import "react-datepicker/dist/react-datepicker.css";
 import WeekPicker from "../WeekPicker";
+import { useFuelPlan } from "../FuelPlanContext";
 
 const Navbar = () => {
+  const { hideMacros, setHideMacros } = useFuelPlan();
+
   return (
     <div className="flex gap-3 items-center h-14 mb-8">
       <WeekPicker />
 
-      <div className="rounded-lg px-5 py-2 h-14 flex items-center border-light-blue border-2 cursor-pointer gap-2">
+      <button
+        onClick={() => setHideMacros((hideMacros) => !hideMacros)}
+        className="rounded-lg px-5 py-2 h-14 bg-gray-back-2 hover:bg-gray-900 flex items-center border-light-blue border-2 cursor-pointer gap-2"
+      >
         <HideEnergyIcon />
-        Hide Energy & Macros
-      </div>
+        {hideMacros ? "Show" : "Hide"} Energy & Macros
+      </button>
 
       <MoreInfoIcon />
 
