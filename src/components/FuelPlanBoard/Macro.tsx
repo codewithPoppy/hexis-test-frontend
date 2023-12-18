@@ -26,7 +26,9 @@ const Macro: React.FC<MacroProps> = ({ macro, trackedData }) => {
         </div>
         <div className="flex w-full justify-between pt-1 pb-2 items-center h-6">
           <p className="text-xs ">Calories</p>
-          <p className="text-xs">{macro.calories + "kcal"}</p>
+          <p className="text-xs">
+            {trackedData.calories + "/" + macro.calories + "kcal"}
+          </p>
         </div>
 
         <div className="max-w-full h-1 rounded-full bg-gray-back relative overflow-hidden">
@@ -39,7 +41,9 @@ const Macro: React.FC<MacroProps> = ({ macro, trackedData }) => {
         </div>
         <div className="flex w-full justify-between pt-1 pb-2 items-center h-6">
           <p className="text-xs ">Carbs</p>
-          <p className="text-xs">{macro.carbs + "g"}</p>
+          <p className="text-xs">
+            {trackedData.carbs + "/" + macro.carbs + "g"}
+          </p>
         </div>
         <div className="max-w-full h-1 rounded-full bg-gray-back relative overflow-hidden">
           <div
@@ -52,7 +56,9 @@ const Macro: React.FC<MacroProps> = ({ macro, trackedData }) => {
         </div>
         <div className="flex w-full justify-between pt-1 pb-2 items-center h-6">
           <p className="text-xs ">Protein</p>
-          <p className="text-xs">{macro.protein + "g"}</p>
+          <p className="text-xs">
+            {trackedData.protein + "/" + macro.protein + "g"}
+          </p>
         </div>
         <div className="max-w-full h-1 rounded-full bg-gray-back relative overflow-hidden">
           <div
@@ -64,7 +70,7 @@ const Macro: React.FC<MacroProps> = ({ macro, trackedData }) => {
         </div>
         <div className="flex w-full justify-between pt-1 pb-2 items-center h-6">
           <p className="text-xs ">Fat</p>
-          <p className="text-xs">{macro.fat + "g"}</p>
+          <p className="text-xs">{trackedData.fat + "/" + macro.fat + "g"}</p>
         </div>
       </div>
     </div>
