@@ -141,6 +141,8 @@ const BoardContentDayItem: React.FC<BoardContentDayItemProps> = ({
       .reduce((a, b) => a + b, 0),
   };
 
+  const shouldShowDeleteButton = !!macro || planItems.length > 0;
+
   return (
     <>
       <div
@@ -176,7 +178,7 @@ const BoardContentDayItem: React.FC<BoardContentDayItemProps> = ({
               >
                 +
               </button>
-              {!!macro || planItems.length > 0 ? (
+              {shouldShowDeleteButton && (
                 <button
                   onClick={handleClickDelete}
                   className="grow border-2 hover:bg-gray-back-2 bg-gray-back rounded-lg border-light-blue p-1 flex items-center justify-center board-item-content-container mx-auto"
@@ -184,7 +186,7 @@ const BoardContentDayItem: React.FC<BoardContentDayItemProps> = ({
                 >
                   x
                 </button>
-              ) : null}
+              )}
             </div>
           )}
         </div>
