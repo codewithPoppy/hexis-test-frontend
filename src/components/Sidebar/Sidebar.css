@@ -1,0 +1,31 @@
+.menu-item:hover svg path {
+  fill: #359cef;
+}
+
+.menu-item:hover svg rect {
+  fill: #359cef;
+}
+
+.menu-item:hover p {
+  color: #359cef;
+}
+
+.menu-item {
+  cursor: pointer;
+}
+
+.menu-item-focused svg path {
+  fill: #359cef;
+}
+
+.menu-item-focused svg rect {
+  fill: #359cef;
+}
+
+.menu-item-focused p {
+  color: #359cef;
+}
+
+.menu-item-focused {
+  cursor: pointer;
+}
