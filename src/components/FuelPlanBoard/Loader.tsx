@@ -9,4 +9,4 @@ const Loader: React.FC<{ loading: boolean }> = ({ loading }) => {
   );
 };
 
-export default Loader;
+export default React.memo(Loader);
