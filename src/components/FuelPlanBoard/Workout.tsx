@@ -84,7 +84,6 @@ const Workout: React.FC<{ workout: Workout }> = ({ workout }) => {
     endTime,
     startTime,
     gPerHour,
-    mod,
     popupType,
     workoutType,
     trackedCalories,

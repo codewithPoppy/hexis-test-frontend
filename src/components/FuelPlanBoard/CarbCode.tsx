@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { CarbCode } from "@/types";
 
 const CarbCode: React.FC<{ carbcode: CarbCode }> = ({ carbcode }) => {
@@ -28,8 +28,12 @@ const CarbCode: React.FC<{ carbcode: CarbCode }> = ({ carbcode }) => {
     Dinner: "bg-breakfast",
   };
 
-  const isTrackError =
-    trackedCalories < targetCaloriesMin || trackedCalories > targetCaloriesMax;
+  const isTrackError = useMemo(
+    () =>
+      trackedCalories < targetCaloriesMin ||
+      trackedCalories > targetCaloriesMax,
+    [trackedCalories, targetCaloriesMin, targetCaloriesMax]
+  );
 
   const displayTime = (targetTime: string) =>
     targetTime.split(":").slice(0, 2).join(":");

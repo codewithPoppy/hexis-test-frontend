@@ -68,4 +68,4 @@ const WeekPicker = () => {
   );
 };
 
-export default WeekPicker;
+export default React.memo(WeekPicker);

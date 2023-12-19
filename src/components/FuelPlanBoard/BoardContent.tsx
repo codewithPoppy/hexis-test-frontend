@@ -1,5 +1,5 @@
 "use client";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { CarbCode, DayPlan, Macro, Workout } from "@/types";
 import { format, eachDayOfInterval } from "date-fns";
 import BoardContentDayItem from "./BoardContentDayItem";
@@ -80,33 +80,41 @@ const BoardContent: React.FC<BoardContentProps> = ({ startDate, endDate }) => {
     refetchAll();
   }, [startDate, endDate, refetchAll]);
 
-  const days = eachDayOfInterval({
-    start: new Date(startDate),
-    end: new Date(endDate),
-  });
+  const days = useMemo(
+    () =>
+      eachDayOfInterval({
+        start: new Date(startDate),
+        end: new Date(endDate),
+      }),
+    [startDate, endDate]
+  );
 
-  const dayPlans: DayPlan[] = days.map((day) => {
-    const dayMacros = macros.filter(
-      (macro) => macro.date === format(day, "yyyy-MM-dd")
-    );
+  const dayPlans: DayPlan[] = useMemo(
+    () =>
+      days.map((day) => {
+        const dayMacros = macros.filter(
+          (macro) => macro.date === format(day, "yyyy-MM-dd")
+        );
 
-    const dayCarbCodes = carbCodes.filter(
-      (carbCode) => carbCode.date === format(day, "yyyy-MM-dd")
-    );
+        const dayCarbCodes = carbCodes.filter(
+          (carbCode) => carbCode.date === format(day, "yyyy-MM-dd")
+        );
 
-    const dayWorkouts =
-      workOuts.filter(
-        (workout) => workout.date === format(day, "yyyy-MM-dd")
-      ) ?? [];
+        const dayWorkouts =
+          workOuts.filter(
+            (workout) => workout.date === format(day, "yyyy-MM-dd")
+          ) ?? [];
 
-    return {
-      date: day,
-      macro: dayMacros?.[0],
-      planItems: [...dayCarbCodes, ...dayWorkouts].sort((a, b) =>
-        a.createdAt > b.createdAt ? 1 : -1
-      ),
-    };
-  });
+        return {
+          date: day,
+          macro: dayMacros?.[0],
+          planItems: [...dayCarbCodes, ...dayWorkouts].sort((a, b) =>
+            a.createdAt > b.createdAt ? 1 : -1
+          ),
+        };
+      }),
+    [days, macros, carbCodes, workOuts]
+  );
 
   if (macrosError || carbCodesError || workOutsError)
     return (

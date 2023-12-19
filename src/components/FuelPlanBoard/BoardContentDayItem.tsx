@@ -1,5 +1,11 @@
 import { CarbCode, DayPlan, Workout, Macro } from "@/types";
-import React, { useState, useRef, useEffect } from "react";
+import React, {
+  useState,
+  useRef,
+  useEffect,
+  useMemo,
+  useCallback,
+} from "react";
 import MacrosComponent from "./Macro";
 import CarbCodeComponent from "./CarbCode";
 import WorkoutComponent from "./Workout";
@@ -11,6 +17,7 @@ import { ADD_CARBCODE, DELETE_CARBCODE } from "@/queries/carbcodes";
 import { ADD_WORKOUT, DELETE_WORKOUT } from "@/queries/workouts";
 import Loader from "./Loader";
 import { useFuelPlan } from "../FuelPlanContext";
+import isEqual from "@/utils/isEqual";
 
 interface BoardContentDayItemProps {
   dayPlan: DayPlan;
@@ -53,12 +60,12 @@ const BoardContentDayItem: React.FC<BoardContentDayItemProps> = ({
     return item && "popupType" in item ? true : false;
   };
 
-  const handleClickNew = () => {
+  const handleClickNew = useCallback(() => {
     addNewModalRef.current?.open();
-  };
-  const handleClickDelete = () => {
+  }, []);
+  const handleClickDelete = useCallback(() => {
     confirmationModalRef.current?.open();
-  };
+  }, []);
   const handleConfirmYes = async () => {
     if (planItems.length === 0) {
       if (macro) {
@@ -83,25 +90,25 @@ const BoardContentDayItem: React.FC<BoardContentDayItemProps> = ({
     }
   };
 
-  const handleCarbCode = async () => {
+  const handleCarbCode = useCallback(async () => {
     const res = await addCarbCode({
       variables: { date: dayPlan.date },
     });
     const newCarbCode = res.data.addCarbCode as CarbCode;
     setCarbCodes((prev) => [...prev, newCarbCode]);
-  };
+  }, [addCarbCode, dayPlan.date, setCarbCodes]);
 
-  const handleMacros = async () => {
+  const handleMacros = useCallback(async () => {
     const res = await addMacro({ variables: { date: dayPlan.date } });
     const newMacros = res.data.addMacro as Macro;
     setMacros((prev) => [...prev, newMacros]);
-  };
+  }, [dayPlan.date, addMacro, setMacros]);
 
-  const handleWorkout = async () => {
+  const handleWorkout = useCallback(async () => {
     const res = await addWorkout({ variables: { date: dayPlan.date } });
     const newWorkout = res.data.addWorkout as Workout;
     setWorkOuts((prev) => [...prev, newWorkout]);
-  };
+  }, [dayPlan.date, addWorkout, setWorkOuts]);
 
   useEffect(() => {
     const loadingStates = [
@@ -122,26 +129,32 @@ const BoardContentDayItem: React.FC<BoardContentDayItemProps> = ({
     deleteWorkoutLoading,
   ]);
 
-  const trackedSum = {
-    calories: planItems
-      .filter((item) => item.isTracked)
-      .map((item) => item.trackedCalories)
-      .reduce((a, b) => a + b, 0),
-    carbs: planItems
-      .filter((item) => item.isTracked)
-      .map((item) => item.trackedCarbs)
-      .reduce((a, b) => a + b, 0),
-    protein: planItems
-      .filter((item) => item.isTracked)
-      .map((item) => item.trackedProtein)
-      .reduce((a, b) => a + b, 0),
-    fat: planItems
-      .filter((item) => item.isTracked)
-      .map((item) => item.trackedFat)
-      .reduce((a, b) => a + b, 0),
-  };
+  const trackedSum = useMemo(
+    () => ({
+      calories: planItems
+        .filter((item) => item.isTracked)
+        .map((item) => item.trackedCalories)
+        .reduce((a, b) => a + b, 0),
+      carbs: planItems
+        .filter((item) => item.isTracked)
+        .map((item) => item.trackedCarbs)
+        .reduce((a, b) => a + b, 0),
+      protein: planItems
+        .filter((item) => item.isTracked)
+        .map((item) => item.trackedProtein)
+        .reduce((a, b) => a + b, 0),
+      fat: planItems
+        .filter((item) => item.isTracked)
+        .map((item) => item.trackedFat)
+        .reduce((a, b) => a + b, 0),
+    }),
+    [planItems]
+  );
 
-  const shouldShowDeleteButton = !!macro || planItems.length > 0;
+  const shouldShowDeleteButton = useMemo(
+    () => !!macro || planItems.length > 0,
+    [macro, planItems]
+  );
 
   return (
     <>
@@ -207,4 +220,4 @@ const BoardContentDayItem: React.FC<BoardContentDayItemProps> = ({
   );
 };
 
-export default BoardContentDayItem;
+export default React.memo(BoardContentDayItem, isEqual);
