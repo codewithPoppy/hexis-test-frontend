@@ -18,6 +18,7 @@ import { ADD_WORKOUT, DELETE_WORKOUT } from "@/queries/workouts";
 import Loader from "./Loader";
 import { useFuelPlan } from "../FuelPlanContext";
 import isEqual from "@/utils/isEqual";
+import { formatISO } from "date-fns";
 
 interface BoardContentDayItemProps {
   dayPlan: DayPlan;
@@ -92,20 +93,24 @@ const BoardContentDayItem: React.FC<BoardContentDayItemProps> = ({
 
   const handleCarbCode = useCallback(async () => {
     const res = await addCarbCode({
-      variables: { date: dayPlan.date },
+      variables: { date: formatISO(dayPlan.date) },
     });
     const newCarbCode = res.data.addCarbCode as CarbCode;
     setCarbCodes((prev) => [...prev, newCarbCode]);
   }, [addCarbCode, dayPlan.date, setCarbCodes]);
 
   const handleMacros = useCallback(async () => {
-    const res = await addMacro({ variables: { date: dayPlan.date } });
+    const res = await addMacro({
+      variables: { date: formatISO(dayPlan.date) },
+    });
     const newMacros = res.data.addMacro as Macro;
     setMacros((prev) => [...prev, newMacros]);
   }, [dayPlan.date, addMacro, setMacros]);
 
   const handleWorkout = useCallback(async () => {
-    const res = await addWorkout({ variables: { date: dayPlan.date } });
+    const res = await addWorkout({
+      variables: { date: formatISO(dayPlan.date) },
+    });
     const newWorkout = res.data.addWorkout as Workout;
     setWorkOuts((prev) => [...prev, newWorkout]);
   }, [dayPlan.date, addWorkout, setWorkOuts]);
